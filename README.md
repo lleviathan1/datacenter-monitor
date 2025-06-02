@@ -15,8 +15,8 @@
 
 ```bash
 # Клонировать репозиторий
-git clone https://github.com/username/datacenter-monitoring.git
-cd datacenter-monitoring
+git clone https://github.com/lleviathan1/datacenter-monitor
+cd datacenter-monitor
 
 # Создать виртуальное окружение
 python -m venv venv
@@ -61,9 +61,8 @@ python app.py
 │   ├── admin_service.py        # Администрирование
 │   └── notification_service.py # Уведомления
 ├── static/                 # Статические файлы
-│   ├── css/                    # Стили
-│   ├── js/                     # JavaScript
-│   └── images/                 # Изображения
+│   ├── css/                    # Стили 
+│   └── js/                     # JavaScript
 ├── templates/              # HTML шаблоны
 ├── database/               # База данных
 └── requirements.txt        # Python зависимости
