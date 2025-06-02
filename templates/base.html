@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Система мониторинга ЦОД{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-server me-2"></i>
+                Мониторинг ЦОД
+                <small class="d-block" style="font-size: 0.7rem; opacity: 0.8;">Система контроля инфраструктуры</small>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                {% if current_user.is_authenticated %}
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-tachometer-alt me-1"></i>
+                            Мониторинг
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analytics">
+                            <i class="fas fa-chart-line me-1"></i>
+                            Аналитика
+                        </a>
+                    </li>
+                    {% if current_user.has_permission('admin') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin">
+                            <i class="fas fa-cogs me-1"></i>
+                            Администрирование
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>{{ current_user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-item-text"><small style="color: white;">Роль: {{ current_user.role|title }}</small></span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">
+                                <i class="fas fa-sign-out-alt me-1"></i>Выход
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+                {% else %}
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="fas fa-sign-in-alt me-1"></i>Вход
+                        </a>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="main-container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Кнопка справки -->
+    <button class="help-button" onclick="showHelp()">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <!-- Модальное окно справки -->
+    <div class="modal fade help-modal" id="helpModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content help-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: white;">
+                    <h5 class="modal-title">
+                        <i class="fas fa-book-open me-2"></i>
+                        Руководство пользователя
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="help-section">
+                        <h4><i class="fas fa-info-circle text-primary me-2"></i>О системе мониторинга</h4>
+                        <p class="mb-4">Система предназначена для непрерывного контроля состояния серверного оборудования и инфраструктуры центра обработки данных в режиме реального времени.</p>
+
+                        <h4><i class="fas fa-chart-bar text-success me-2"></i>Основные метрики мониторинга</h4>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="metric-icon cpu me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+                                        <i class="fas fa-microchip"></i>
+                                    </div>
+                                    <div>
+                                        <strong>CPU (Процессор)</strong>
+                                        <br><small class="text-muted">Загрузка центрального процессора в процентах от максимальной производительности.</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="metric-icon memory me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+                                        <i class="fas fa-memory"></i>
+                                    </div>
+                                    <div>
+                                        <strong>RAM (Оперативная память)</strong>
+                                        <br><small class="text-muted">Объем используемой оперативной памяти относительно общего объема.</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="metric-icon disk me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+                                        <i class="fas fa-hdd"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Дисковое пространство</strong>
+                                        <br><small class="text-muted">Процент заполнения основного раздела файловой системы.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="metric-icon network me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+                                        <i class="fas fa-network-wired"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Сетевой трафик</strong>
+                                        <br><small class="text-muted">Скорость передачи данных через сетевые интерфейсы сервера.</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="metric-icon temperature me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+                                        <i class="fas fa-thermometer-half"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Температура</strong>
+                                        <br><small class="text-muted">Температура воздуха в серверном помещении.</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="metric-icon humidity me-3" style="width: 40px; height: 40px; font-size: 1rem;">
+                                        <i class="fas fa-tint"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Влажность</strong>
+                                        <br><small class="text-muted">Относительная влажность воздуха в серверном помещении.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4><i class="fas fa-palette text-warning me-2"></i>Цветовая индикация состояний</h4>
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="status-indicator bg-success me-2"></div>
+                                    <strong style="color: var(--text-primary);">Нормальное</strong>
+                                </div>
+                                <small class="text-muted">Значения в пределах рабочих параметров</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="status-indicator bg-warning me-2"></div>
+                                    <strong style="color: var(--text-primary);">Предупреждение</strong>
+                                </div>
+                                <small class="text-muted">Значения приближаются к критическим</small>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="status-indicator bg-danger me-2"></div>
+                                    <strong style="color: var(--text-primary);">Критическое</strong>
+                                </div>
+                                <small class="text-muted">Требуется немедленное вмешательство</small>
+                            </div>
+                        </div>
+
+                        <h4><i class="fas fa-brain text-info me-2"></i>Интеллектуальная аналитика</h4>
+                        <p class="mb-3">Система использует алгоритмы машинного обучения для:</p>
+                        <ul class="mb-4">
+                            <li><strong>Обнаружения аномалий</strong> - автоматическое выявление нестандартного поведения системы</li>
+                            <li><strong>Прогнозирования</strong> - предсказание возможных проблем на основе трендов</li>
+                            <li><strong>Генерации рекомендаций</strong> - советы по оптимизации производительности</li>
+                            <li><strong>Корреляционного анализа</strong> - выявление взаимосвязей между метриками</li>
+                        </ul>
+
+                        <h4><i class="fas fa-bell text-primary me-2"></i>Система оповещений</h4>
+                        <p class="mb-3">Автоматические уведомления отправляются при:</p>
+                        <ul class="mb-4">
+                            <li>Превышении пороговых значений загрузки CPU</li>
+                            <li>Критическом уровне использования памяти</li>
+                            <li>Нехватке дискового пространства</li>
+                            <li>Аномальных значениях температуры и влажности</li>
+                        </ul>
+
+                        <h4><i class="fas fa-wrench text-success me-2"></i>Рекомендации по устранению проблем</h4>
+                        <div class="alert alert-info">
+                            <h6>При критических значениях метрик:</h6>
+                            <ol class="mb-0">
+                                <li><strong>Высокая загрузка CPU (>90%)</strong> - проверить активные процессы, рассмотреть масштабирование</li>
+                                <li><strong>Нехватка памяти (>95%)</strong> - завершить неиспользуемые процессы, увеличить объем RAM</li>
+                                <li><strong>Заполненность диска (>95%)</strong> - очистить временные файлы, архивировать данные</li>
+                                <li><strong>Высокая температура (>40°C)</strong> - проверить системы охлаждения и вентиляции</li>
+                            </ol>
+                        </div>
+
+                        <h4><i class="fas fa-keyboard text-secondary me-2"></i>Сочетания клавиш</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <kbd>F5</kbd> - Обновить данные<br>
+                                <kbd>Esc</kbd> - Закрыть модальные окна<br>
+                            </div>
+                            <div class="col-md-6">
+                                <kbd>?</kbd> - Открыть справку<br>
+                                <kbd>Space</kbd> - Приостановить/возобновить обновления
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                        <i class="fas fa-check me-2"></i>Понятно
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Базовый JavaScript -->
+    <script>
+        // Функция показа справки
+        function showHelp() {
+            const modal = new bootstrap.Modal(document.getElementById('helpModal'));
+            modal.show();
+        }
+
+        // Горячие клавиши
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '?' && !e.ctrlKey && !e.altKey) {
+                e.preventDefault();
+                showHelp();
+            }
+
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal.show');
+                modals.forEach(modal => {
+                    bootstrap.Modal.getInstance(modal)?.hide();
+                });
+            }
+
+            if (e.key === 'F5') {
+                e.preventDefault();
+                if (window.dashboardMonitor) {
+                    window.dashboardMonitor.refreshData();
+                } else {
+                    location.reload();
+                }
+            }
+        });
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация Bootstrap tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Показать подсказку о справке для новых пользователей
+            if (!localStorage.getItem('help_tooltip_shown')) {
+                setTimeout(() => {
+                    const toast = document.createElement('div');
+                    toast.className = 'toast show position-fixed';
+                    toast.style.cssText = 'top: 100px; right: 20px; z-index: 1050;';
+                    toast.innerHTML = `
+                        <div class="toast-header" style="background: var(--bg-card); color: var(--text-primary); border-bottom: 1px solid var(--border-card);">
+                            <i class="fas fa-info-circle text-info me-2"></i>
+                            <strong class="me-auto">Справочная система</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" style="filter: invert(1);"></button>
+                        </div>
+                        <div class="toast-body" style="background: var(--bg-card); color: var(--text-primary);">
+                            Нажмите <kbd>?</kbd> или кнопку <i class="fas fa-question"></i> для получения подробной справки
+                        </div>
+                    `;
+                    document.body.appendChild(toast);
+
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 6000);
+
+                    localStorage.setItem('help_tooltip_shown', 'true');
+                }, 3000);
+            }
+        });
+    </script>
+
+    <!-- Пользовательский JS -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

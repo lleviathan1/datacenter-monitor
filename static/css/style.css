@@ -1,0 +1,654 @@
+:root {
+    --primary-blue: #3B82F6;
+    --light-blue: #1E40AF;
+    --dark-blue: #1D4ED8;
+    --success-green: #10B981;
+    --warning-orange: #F59E0B;
+    --danger-red: #EF4444;
+    --shadow-soft: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    --shadow-medium: 0 4px 8px -1px rgba(0, 0, 0, 0.4);
+    --shadow-large: 0 10px 20px -3px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ТЕМНАЯ ТЕМА - как на изображении */
+:root {
+    --bg-dark: #1a1d29;
+    --bg-darker: #151820;
+    --bg-card: #242938;
+    --bg-card-light: #2a2f3f;
+    --text-light: #ffffff;
+    --text-muted: #9ca3af;
+    --text-primary: #ffffff;
+    --border-dark: #374151;
+    --border-card: #374151;
+    --navbar-gradient: linear-gradient(135deg, #1a1d29 0%, #242938 100%);
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --input-bg: #374151;
+    --input-border: #4b5563;
+    --input-text: #ffffff;
+    --table-border: #374151;
+    --table-hover: #2a2f3f;
+    --separator-color: #374151;
+}
+
+body {
+    background: var(--bg-dark);
+    min-height: 100vh;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+/* Главный контейнер */
+.main-container {
+    background: var(--bg-dark);
+    min-height: calc(100vh - 80px);
+    border-radius: 0;
+    margin-top: 0;
+    padding: 30px;
+    transition: all 0.3s ease;
+}
+
+/* Навигация */
+.navbar {
+    background: var(--navbar-gradient) !important;
+    padding: 15px 0;
+    box-shadow: var(--shadow-medium);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: white !important;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 8px;
+    padding: 8px 16px !important;
+    margin: 0 5px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white !important;
+}
+
+/* Карточки - темная тема */
+.card {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-card) !important;
+    color: var(--text-primary) !important;
+    box-shadow: var(--card-shadow) !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-medium) !important;
+    transform: translateY(-1px);
+}
+
+.card-header {
+    background: var(--bg-card) !important;
+    border-bottom: 1px solid var(--separator-color) !important;
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    padding: 1.25rem 1.5rem !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.card-body {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    padding: 1.5rem !important;
+}
+
+/* Формы - темная тема */
+.form-control, .form-select {
+    background: var(--input-bg) !important;
+    border: 1px solid var(--input-border) !important;
+    color: var(--input-text) !important;
+    border-radius: 8px !important;
+    padding: 0.75rem 1rem !important;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    background: var(--input-bg) !important;
+    border-color: var(--primary-blue) !important;
+    color: var(--input-text) !important;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25) !important;
+}
+
+.form-label {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Таблицы - темная тема */
+.table {
+    color: var(--text-primary) !important;
+    --bs-table-bg: var(--bg-card) !important;
+    --bs-table-border-color: var(--table-border) !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.table thead th {
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)) !important;
+    color: white !important;
+    border-bottom: none !important;
+    font-weight: 600;
+    padding: 1rem !important;
+}
+
+.table tbody tr {
+    background: var(--bg-card) !important;
+    border-bottom: 1px solid var(--table-border) !important;
+}
+
+.table tbody tr:hover {
+    background: var(--table-hover) !important;
+}
+
+.table tbody td {
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--table-border) !important;
+    padding: 1rem !important;
+    vertical-align: middle;
+}
+
+/* Исправление для полей ввода в таблице настроек */
+.table .form-control {
+    background: var(--input-bg) !important;
+    border: 1px solid var(--input-border) !important;
+    color: var(--input-text) !important;
+    font-size: 0.875rem;
+    border-radius: 6px !important;
+    padding: 0.5rem 0.75rem !important;
+}
+
+.table .form-control:focus {
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 0.1rem rgba(59, 130, 246, 0.25) !important;
+}
+
+/* Чекбоксы */
+.form-check-input {
+    background-color: var(--input-bg) !important;
+    border: 1px solid var(--input-border) !important;
+    border-radius: 4px !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-blue) !important;
+    border-color: var(--primary-blue) !important;
+}
+
+/* Текст - исправления видимости */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+}
+
+p, span, div {
+    color: var(--text-primary);
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Исправление видимости текста */
+.metric-label, .metric-detail {
+    color: var(--text-primary) !important;
+}
+
+.card-text, .text-dark {
+    color: var(--text-primary) !important;
+}
+
+/* Кнопки */
+.btn {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    padding: 0.75rem 1.5rem !important;
+    border-width: 1px !important;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue)) !important;
+    border-color: var(--primary-blue) !important;
+    color: white !important;
+}
+
+.btn-outline-primary {
+    color: var(--primary-blue) !important;
+    border-color: var(--primary-blue) !important;
+    background: transparent !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-blue) !important;
+    border-color: var(--primary-blue) !important;
+    color: white !important;
+}
+
+.btn-outline-light {
+    color: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    background: transparent !important;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    color: white !important;
+}
+
+.btn-outline-secondary {
+    color: var(--text-muted) !important;
+    border-color: var(--border-dark) !important;
+    background: transparent !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--text-muted) !important;
+    border-color: var(--text-muted) !important;
+    color: white !important;
+}
+
+/* Метрики - обновленные цвета как на изображении */
+.metric-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    border: 1px solid var(--border-card);
+    transition: all 0.3s ease;
+    position: relative;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+}
+
+.metric-card:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.metric-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Цвета иконок точно как на изображении */
+.metric-icon.cpu {
+    background: linear-gradient(135deg, #3B82F6, #1E40AF); /* Синий для CPU */
+}
+
+.metric-icon.memory {
+    background: linear-gradient(135deg, #06B6D4, #0891B2); /* Голубой для памяти */
+}
+
+.metric-icon.disk {
+    background: linear-gradient(135deg, #10B981, #059669); /* Зеленый для диска */
+}
+
+.metric-icon.network {
+    background: linear-gradient(135deg, #F59E0B, #D97706); /* Желтый для сети */
+}
+
+.metric-icon.temperature {
+    background: linear-gradient(135deg, #F59E0B, #D97706); /* Желтый для температуры */
+}
+
+.metric-icon.humidity {
+    background: linear-gradient(135deg, #06B6D4, #0E7490); /* Голубой для влажности */
+}
+
+.metric-icon.pressure {
+    background: linear-gradient(135deg, #6B7280, #4B5563); /* Серый для давления */
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-light);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary) !important;
+    margin: 0;
+}
+
+.metric-detail {
+    font-size: 0.8rem;
+    color: var(--text-muted) !important;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.metric-info {
+    flex-grow: 1;
+    margin-left: 15px;
+    text-align: left;
+}
+
+.metric-indicator {
+    margin-top: 1rem;
+}
+
+/* Статусные индикаторы - исправленные */
+.status-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+}
+
+.status-success {
+    background: var(--success-green);
+    color: white;
+}
+
+.status-warning {
+    background: var(--warning-orange);
+    color: white;
+}
+
+.status-danger {
+    background: var(--danger-red);
+    color: white;
+}
+
+.status-info {
+    background: var(--primary-blue);
+    color: white;
+}
+
+/* Hero section - темная тема */
+.hero-section {
+    background: linear-gradient(135deg, #1a1d29 0%, #242938 100%);
+    margin: -30px -30px 30px -30px;
+    padding: 30px;
+    border-radius: 0;
+    color: white;
+    box-shadow: var(--shadow-large);
+}
+
+/* Прогресс-бары */
+.progress {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.progress-sm {
+    height: 8px;
+}
+
+.progress-bar {
+    border-radius: 8px !important;
+    transition: width 0.6s ease !important;
+}
+
+/* Обновленные алерты для темной темы */
+.alert {
+    border-radius: 12px;
+    border: none;
+    padding: 15px 20px;
+    font-weight: 500;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid transparent;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10B981 !important;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #F59E0B !important;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444 !important;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.alert-info {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3B82F6 !important;
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Справочная система */
+.help-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.3rem;
+    box-shadow: var(--shadow-large);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 1000;
+    border: none;
+}
+
+.help-button:hover {
+    transform: scale(1.05);
+}
+
+.help-modal {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.help-content {
+    background: var(--bg-card);
+    border-radius: 16px;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-large);
+}
+
+/* Модальные окна - темная тема */
+.modal-content {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-card) !important;
+    border-radius: 16px !important;
+    box-shadow: var(--shadow-large) !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--separator-color) !important;
+    background: var(--bg-card) !important;
+    border-radius: 16px 16px 0 0 !important;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--separator-color) !important;
+    background: var(--bg-card) !important;
+    border-radius: 0 0 16px 16px !important;
+}
+
+/* Графики - белый фон в темном контейнере */
+.chart-container {
+    position: relative;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 0;
+    border: 1px solid var(--border-card);
+    box-shadow: var(--card-shadow);
+}
+
+/* Анимации загрузки */
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top: 3px solid var(--primary-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Значки и бейджи - исправленные цвета */
+.badge {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    padding: 0.35rem 0.65rem !important;
+}
+
+.badge.bg-info, .bg-info {
+    background-color: #1E40AF !important;
+    color: white !important;
+}
+
+.text-info {
+    color: #1E40AF !important;
+}
+
+.btn-info {
+    background-color: #1E40AF !important;
+    border-color: #1E40AF !important;
+    color: white !important;
+}
+
+/* Dropdown меню - темная тема */
+.dropdown-menu {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-card) !important;
+    color: var(--text-primary) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-medium) !important;
+}
+
+.dropdown-item {
+    color: var(--text-primary) !important;
+    border-radius: 8px !important;
+    margin: 0.25rem !important;
+}
+
+.dropdown-item:hover {
+    background: var(--table-hover) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Input groups */
+.input-group-text {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--input-border) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Улучшенные разделители */
+hr {
+    border-color: var(--separator-color) !important;
+    opacity: 1 !important;
+}
+
+/* Специальные цвета для Bootstrap компонентов */
+.bg-primary {
+    background: var(--bg-card) !important;
+}
+
+.bg-dark {
+    background: var(--bg-darker) !important;
+}
+
+.text-white {
+    color: var(--text-light) !important;
+}
+
+.text-white-50 {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .main-container {
+        margin-top: 0;
+        padding: 20px 15px;
+        border-radius: 0;
+    }
+
+    .metric-card {
+        padding: 20px 15px;
+    }
+
+    .metric-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+
+    .metric-value {
+        font-size: 1.8rem;
+    }
+
+    .help-button {
+        width: 48px;
+        height: 48px;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .card {
+        border-radius: 12px !important;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem !important;
+    }
+}

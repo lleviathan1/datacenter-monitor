@@ -1,0 +1,445 @@
+{% extends "base.html" %}
+
+{% block title %}Панель администратора - Мониторинг ЦОД{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Заголовок -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2><i class="fas fa-cogs text-primary me-2"></i>Панель администратора</h2>
+                <a href="/" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i>Вернуться к мониторингу
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Статистика оповещений -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 id="total-alerts-24h">--</h4>
+                            <p class="mb-0">Всего инцидентов (24ч)</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-exclamation-triangle fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 id="critical-alerts-24h">--</h4>
+                            <p class="mb-0">Критических (24ч)</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-fire fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 id="resolved-alerts-24h">--</h4>
+                            <p class="mb-0">Разрешенных (24ч)</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 id="active-alerts">--</h4>
+                            <p class="mb-0">Активных инцидентов</p>
+                        </div>
+                        <div>
+                            <i class="fas fa-clock fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Настройки оповещений -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5><i class="fas fa-bell text-primary me-2"></i>Настройки пороговых значений</h5>
+                            <small class="text-muted">Настройте пороговые значения для автоматических оповещений системы мониторинга</small>
+                        </div>
+                        <!-- Переключатель режимов -->
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="settingsMode" id="currentSettings" checked>
+                            <label class="btn btn-outline-primary" for="currentSettings" onclick="switchSettingsMode('current')">
+                                <i class="fas fa-cog me-1"></i>Текущие
+                            </label>
+
+                            <input type="radio" class="btn-check" name="settingsMode" id="defaultSettings">
+                            <label class="btn btn-outline-success" for="defaultSettings" onclick="switchSettingsMode('default')">
+                                <i class="fas fa-star me-1"></i>По умолчанию
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="alert-settings-form">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Метрика</th>
+                                        <th>Предупреждение (%)</th>
+                                        <th>Критично (%)</th>
+                                        <th>Email уведомления</th>
+                                        <th>Эскалация (мин)</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="alert-settings-table">
+                                    <!-- Заполняется динамически через JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4 d-flex gap-2 align-items-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i><span id="saveButtonText">Сохранить настройки</span>
+                            </button>
+
+                            <button type="button" class="btn btn-secondary" onclick="resetSettings()">
+                                <i class="fas fa-undo me-1"></i><span id="resetButtonText">Сбросить к умолчаниям</span>
+                            </button>
+
+                            <div class="ms-3">
+                                <span class="badge bg-primary" id="modeIndicator">Редактируются текущие настройки</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Активные инциденты -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-list text-primary me-2"></i>Активные инциденты</h5>
+                    <div class="d-flex gap-2">
+                        <div class="input-group input-group-sm" style="width: 200px;">
+                            <span class="input-group-text">Показать:</span>
+                            <select class="form-select" id="alerts-limit" onchange="updateAlertsLimit()">
+                                <option value="5">5 инцидентов</option>
+                                <option value="10" selected>10 инцидентов</option>
+                                <option value="20">20 инцидентов</option>
+                                <option value="50">50 инцидентов</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary" onclick="refreshAlerts()">
+                            <i class="fas fa-sync-alt"></i> Обновить
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="active-alerts-container">
+                        <!-- Заполняется динамически -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Настройки email уведомлений -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-envelope text-primary me-2"></i>Настройки Email уведомлений</h5>
+                    <small class="text-muted">Настройка SMTP сервера и списка получателей уведомлений</small>
+                </div>
+                <div class="card-body">
+                    <form id="email-settings-form">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">SMTP сервер</label>
+                                    <input type="text" class="form-control" id="smtp-server" placeholder="smtp.gmail.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Порт</label>
+                                    <input type="number" class="form-control" id="smtp-port" placeholder="587">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Имя пользователя</label>
+                                    <input type="text" class="form-control" id="smtp-username" placeholder="username@company.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Пароль</label>
+                                    <input type="password" class="form-control" id="smtp-password" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Отправитель</label>
+                                    <input type="email" class="form-control" id="from-email" placeholder="datacenter@company.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Получатели (через запятую)</label>
+                                    <textarea class="form-control" id="to-emails" rows="3" placeholder="admin1@company.com, admin2@company.com"></textarea>
+                                    <div class="form-text">Список email адресов для получения обычных уведомлений</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Администраторы для эскалации (через запятую)</label>
+                                    <textarea class="form-control" id="admin-emails" rows="3" placeholder="manager@company.com, director@company.com"></textarea>
+                                    <div class="form-text">Список email адресов для критических уведомлений и эскалации</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Сохранить настройки Email
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="testEmail()">
+                                <i class="fas fa-paper-plane me-1"></i>Тестовое письмо
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Управление системой -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-cogs text-primary me-2"></i>Управление системой</h5>
+                    <small class="text-muted">Инструменты для резервного копирования, конфигурации и диагностики системы</small>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Резервное копирование -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0"><i class="fas fa-download me-2"></i>Резервное копирование</h6>
+                                </div>
+                                <div class="card-body text-center">
+                                    <button class="btn btn-outline-primary mb-2 w-100" onclick="createBackup()">
+                                        <i class="fas fa-save me-1"></i>Создать резервную копию
+                                    </button>
+                                    <button class="btn btn-outline-secondary w-100" onclick="exportConfig()">
+                                        <i class="fas fa-file-export me-1"></i>Экспорт конфигурации
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Обслуживание и диагностика -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0"><i class="fas fa-tools me-2"></i>Обслуживание и диагностика</h6>
+                                </div>
+                                <div class="card-body text-center">
+                                    <button class="btn btn-outline-success mb-2 w-100" onclick="checkSystemHealth()">
+                                        <i class="fas fa-heartbeat me-1"></i>Проверка системы
+                                    </button>
+                                    <button class="btn btn-outline-warning w-100" onclick="cleanupOldData()">
+                                        <i class="fas fa-broom me-1"></i>Очистка старых данных
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Конфигурация системы -->
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100 border-warning">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0"><i class="fas fa-cog me-2"></i>Конфигурация системы</h6>
+                                </div>
+                                <div class="card-body text-center">
+                                    <button class="btn btn-outline-info mb-2 w-100" onclick="showSystemStats()">
+                                        <i class="fas fa-chart-bar me-1"></i>Статистика системы
+                                    </button>
+                                    <button class="btn btn-outline-secondary w-100" onclick="showBackgroundStatus()">
+                                        <i class="fas fa-tasks me-1"></i>Фоновые службы
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Результаты операций -->
+                    <div id="system-operation-results" class="mt-3" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-info-circle me-2"></i>Результаты операции</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="operation-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Управление пользователями -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-users text-primary me-2"></i>Управление пользователями</h5>
+                    <button class="btn btn-primary btn-sm" onclick="showCreateUserModal()">
+                        <i class="fas fa-plus me-1"></i>Добавить пользователя
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Пользователь</th>
+                                    <th>Email</th>
+                                    <th>Роль</th>
+                                    <th>Статус</th>
+                                    <th>Последний вход</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table">
+                                <!-- Заполняется динамически -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Журнал аудита -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-clipboard-list text-primary me-2"></i>Журнал аудита</h5>
+                    <div class="input-group input-group-sm" style="width: 200px;">
+                        <span class="input-group-text">Показать:</span>
+                        <select class="form-select" id="audit-limit" onchange="updateAuditLimit()">
+                            <option value="10">10 записей</option>
+                            <option value="20" selected>20 записей</option>
+                            <option value="50">50 записей</option>
+                            <option value="100">100 записей</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="audit-logs-container">
+                        <!-- Заполняется динамически -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно создания пользователя -->
+<div class="modal fade" id="createUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createUserForm">
+                    <div class="mb-3">
+                        <label class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" name="username" required>
+                        <div class="form-text">Уникальное имя для входа в систему</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" required>
+                        <div class="form-text">Адрес для уведомлений</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-control" name="password" required>
+                        <div class="form-text">Минимум 6 символов</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Роль</label>
+                        <select class="form-select" name="role" required>
+                            <option value="viewer">Наблюдатель - только просмотр данных</option>
+                            <option value="operator">Оператор - мониторинг и разрешение инцидентов</option>
+                            <option value="admin">Администратор - полный доступ</option>
+                        </select>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="is_active" checked>
+                        <label class="form-check-label">Активный пользователь</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="createUser()">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения сброса -->
+<div class="modal fade" id="confirmResetModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подтверждение сброса</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите сбросить настройки для <strong id="reset-metric-name"></strong> к значениям по умолчанию?</p>
+                <p class="text-muted">Это действие нельзя отменить.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-warning" id="confirm-reset-btn">Сбросить</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
