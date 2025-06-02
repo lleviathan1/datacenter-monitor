@@ -11,7 +11,6 @@
     --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* ТЕМНАЯ ТЕМА - как на изображении */
 :root {
     --bg-dark: #1a1d29;
     --bg-darker: #151820;
@@ -77,7 +76,7 @@ body {
     color: white !important;
 }
 
-/* Карточки - темная тема */
+/* Карточки */
 .card {
     background: var(--bg-card) !important;
     border: 1px solid var(--border-card) !important;
@@ -107,7 +106,7 @@ body {
     padding: 1.5rem !important;
 }
 
-/* Формы - темная тема */
+/* Формы */
 .form-control, .form-select {
     background: var(--input-bg) !important;
     border: 1px solid var(--input-border) !important;
@@ -130,7 +129,7 @@ body {
     margin-bottom: 0.5rem;
 }
 
-/* Таблицы - темная тема */
+/* Таблицы */
 .table {
     color: var(--text-primary) !important;
     --bs-table-bg: var(--bg-card) !important;
@@ -164,7 +163,6 @@ body {
     vertical-align: middle;
 }
 
-/* Исправление для полей ввода в таблице настроек */
 .table .form-control {
     background: var(--input-bg) !important;
     border: 1px solid var(--input-border) !important;
@@ -191,7 +189,6 @@ body {
     border-color: var(--primary-blue) !important;
 }
 
-/* Текст - исправления видимости */
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary) !important;
     font-weight: 600;
@@ -205,7 +202,6 @@ p, span, div {
     color: var(--text-muted) !important;
 }
 
-/* Исправление видимости текста */
 .metric-label, .metric-detail {
     color: var(--text-primary) !important;
 }
@@ -270,7 +266,7 @@ p, span, div {
     color: white !important;
 }
 
-/* Метрики - обновленные цвета как на изображении */
+/* Метрики */
 .metric-card {
     background: var(--bg-card);
     border-radius: 16px;
@@ -301,7 +297,7 @@ p, span, div {
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-/* Цвета иконок точно как на изображении */
+/* Цвета иконок */
 .metric-icon.cpu {
     background: linear-gradient(135deg, #3B82F6, #1E40AF); /* Синий для CPU */
 }
@@ -362,7 +358,7 @@ p, span, div {
     margin-top: 1rem;
 }
 
-/* Статусные индикаторы - исправленные */
+/* Статусные индикаторы */
 .status-indicator {
     width: 16px;
     height: 16px;
@@ -391,7 +387,7 @@ p, span, div {
     color: white;
 }
 
-/* Hero section - темная тема */
+/* Hero section */
 .hero-section {
     background: linear-gradient(135deg, #1a1d29 0%, #242938 100%);
     margin: -30px -30px 30px -30px;
@@ -418,7 +414,7 @@ p, span, div {
     transition: width 0.6s ease !important;
 }
 
-/* Обновленные алерты для темной темы */
+/* Алерты */
 .alert {
     border-radius: 12px;
     border: none;
@@ -494,7 +490,7 @@ p, span, div {
     box-shadow: var(--shadow-large);
 }
 
-/* Модальные окна - темная тема */
+/* Модальные окна */
 .modal-content {
     background: var(--bg-card) !important;
     color: var(--text-primary) !important;
@@ -515,7 +511,7 @@ p, span, div {
     border-radius: 0 0 16px 16px !important;
 }
 
-/* Графики - белый фон в темном контейнере */
+/* Графики */
 .chart-container {
     position: relative;
     background: #ffffff;
@@ -542,7 +538,7 @@ p, span, div {
     100% { transform: rotate(360deg); }
 }
 
-/* Значки и бейджи - исправленные цвета */
+/* Значки и бейджи */
 .badge {
     font-size: 0.75rem !important;
     font-weight: 500 !important;
@@ -565,7 +561,7 @@ p, span, div {
     color: white !important;
 }
 
-/* Dropdown меню - темная тема */
+/* Dropdown меню */
 .dropdown-menu {
     background: var(--bg-card) !important;
     border: 1px solid var(--border-card) !important;
@@ -592,13 +588,11 @@ p, span, div {
     color: var(--text-primary) !important;
 }
 
-/* Улучшенные разделители */
 hr {
     border-color: var(--separator-color) !important;
     opacity: 1 !important;
 }
 
-/* Специальные цвета для Bootstrap компонентов */
 .bg-primary {
     background: var(--bg-card) !important;
 }

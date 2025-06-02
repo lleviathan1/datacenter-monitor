@@ -269,7 +269,7 @@ class AnalyticsService:
                         'acceleration': float(acceleration)
                     }
 
-                    # Улучшенный прогноз с учетом сезонности и волатильности
+                    # Прогноз с учетом сезонности и волатильности
                     current_value = float(values.iloc[-1])
 
                     # Добавляем шум и реалистичную изменчивость

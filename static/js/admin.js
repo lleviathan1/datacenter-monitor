@@ -538,7 +538,7 @@ class AdminPanel {
                     this.showAlert('Ошибка сохранения настроек по умолчанию', 'danger');
                 }
             } else {
-                // Сохраняем как текущие настройки (оригинальная логика)
+                // Сохраняем как текущие настройки
                 const settings = [];
                 const tableBody = document.getElementById('alert-settings-table');
                 const rows = tableBody.querySelectorAll('tr');

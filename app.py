@@ -327,7 +327,7 @@ def api_save_alert_settings():
         return jsonify({'success': False, 'error': str(e)})
 
 
-# Новые API для работы с настройками по умолчанию
+# API для работы с настройками по умолчанию
 @app.route('/api/settings/save-defaults', methods=['POST'])
 @login_required
 def api_save_default_settings():
@@ -724,7 +724,6 @@ def api_background_status():
         print(f"   Текущее время: {datetime.utcnow()}")
 
         if last_metric:
-            # Используем UTC везде для согласованности
             current_time = datetime.utcnow()
             last_time = last_metric.timestamp
 
@@ -734,7 +733,7 @@ def api_background_status():
             print(f"   Разница: {seconds_ago} секунд")
 
             status = {
-                'monitoring_active': seconds_ago < 60,  # Увеличиваем до 60 секунд
+                'monitoring_active': seconds_ago < 60,
                 'last_data_time': last_time.strftime('%Y-%m-%d %H:%M:%S'),
                 'seconds_since_last': seconds_ago,
                 'current_metrics_available': bool(current_metrics),

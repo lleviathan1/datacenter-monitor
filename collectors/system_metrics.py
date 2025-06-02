@@ -145,7 +145,7 @@ class EnhancedSystemMetricsCollector:
         """Сохранение метрик в базу данных"""
         try:
             metric_record = SystemMetrics(
-                timestamp=datetime.now(),  # Принудительно устанавливаем текущее время
+                timestamp=datetime.now(),
                 cpu_percent=metrics['cpu_percent'],
                 memory_percent=metrics['memory_percent'],
                 memory_used_gb=metrics['memory_used_gb'],

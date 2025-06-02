@@ -35,7 +35,7 @@ def generate_demo_metrics(days=7, points_per_day=288):
         for point in range(points_per_day):
             timestamp = day_start + timedelta(minutes=point * interval_minutes)
 
-            # Добавляем временные паттерны (рабочие часы = больше нагрузка)
+            # Добавляем временные паттерны
             hour = timestamp.hour
             work_factor = 1.0
             if 9 <= hour <= 18:  # рабочие часы
@@ -154,7 +154,7 @@ def generate_demo_alerts():
             value = random.uniform(40, 55)
             threshold = 40 if severity == 'warning' else 50
             message = f"Высокая температура в ЦОД: {value:.1f}°C"
-        else:  # humidity
+        else:
             value = random.uniform(70, 90)
             threshold = 70 if severity == 'warning' else 85
             message = f"Высокая влажность в ЦОД: {value:.1f}%"
